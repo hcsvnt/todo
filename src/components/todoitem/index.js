@@ -12,6 +12,8 @@ import {
 
 import {todoListData} from '../../App';
 
+import Test from '../test';
+
 
 function replaceItemAtIndex(arr, index, newValue) {
     return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
@@ -56,8 +58,11 @@ const TodoItem = ({item}) => {
                 type="checkbox"
                 checked={item.isComplete}
                 onChange={toggleItemCompletion}
-            />
+                />
             <button onClick={deleteItem}>delete</button>
+            <Link to={`/items/${item.id}`}>
+                test
+            </Link>
         </div>
     );
 };

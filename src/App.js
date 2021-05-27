@@ -21,6 +21,7 @@ function App() {
       <div>
         <p>
           speed coding challenge yeeeehaw
+          add if note is empty dont add
         </p>
         <TodoList />
       </div>

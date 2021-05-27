@@ -18,6 +18,8 @@ import TodoListFilters from '../todolistfilters';
 import {todoListData} from '../../App';
 import {filteredTodoListData} from '../todolistfilters';
 
+import Test from '../test';
+
 
 const todoListStatsData = selector({
     key: 'todoListStats',
@@ -62,18 +64,50 @@ const TodoListStats = () => {
     )
 };
 
+const testQuery = 'mama';
+
+const todoListSearchQuery = atom({
+    key: 'todoListSearchQuery',
+    default: ''
+})
+
+const todoListSearchResults = selector({
+    key: 'todoListSearchResults',
+    get: ({get}) => {
+        const todoList = get(todoListData);
+        const searchQuery = get(todoListSearchQuery);
+
+        const searchResults = todoList.filter(item => item.text.toLowerCase().includes(searchQuery.toLowerCase()))
+        return searchResults
+    }
+})
+
 const TodoList = () => {
-    const todoList = useRecoilValue(filteredTodoListData);
+    const [searchQuery, setSearchQuery] = useRecoilState(todoListSearchQuery);
+    // const todoList = useRecoilValue(filteredTodoListData);  this was my list before live search
+    const todoList = useRecoilValue(todoListSearchResults);
     console.log(todoList)
+    console.log('pause');
+    const searchResults = useRecoilValue(todoListSearchResults);
+    console.log(searchResults)
     return (
         <div>
-            <TodoListStats />
-            <TodoListFilters />
-            <TodoItemCreator />
+            <Switch>
+                <Route exact path='/'>
+                    <TodoListStats />
+                    <TodoListFilters />
+                    <TodoItemCreator />
 
-            {todoList.map((todoItem) => (
-                <TodoItem key={todoItem.id} item={todoItem} />
-            ))}
+                    <input name='search' value={searchQuery} placeholder="search" onChange={(e) => setSearchQuery(e.target.value)}/>
+
+                    {todoList.map((todoItem) => (
+                        <TodoItem key={todoItem.id} item={todoItem} />
+                        ))}
+                </Route>
+                <Route path='/items/:Id'>
+                    <Test />
+                </Route>
+            </Switch>
         </div>
     )
 };
