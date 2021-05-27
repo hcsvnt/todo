@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link, Switch, Route} from "react-router-dom";
 
 import {
     RecoilRoot,
@@ -10,6 +11,7 @@ import {
   } from 'recoil';
 
 import {todoListData} from '../../App';
+
 
 function replaceItemAtIndex(arr, index, newValue) {
     return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
@@ -49,6 +51,7 @@ const TodoItem = ({item}) => {
     return (
         <div>
             <input type='text' value={item.text} onChange={editItemText} />
+            <span>chars: {item.text.length} </span>
             <input 
                 type="checkbox"
                 checked={item.isComplete}

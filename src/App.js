@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+
 import {
   RecoilRoot,
   atom,
@@ -20,14 +15,12 @@ const todoListData = atom({
   default: [],
 });
 
-
-
 function App() {
   return (
     <RecoilRoot>
       <div>
         <p>
-          speed coding challenge yeeeehaw ss
+          speed coding challenge yeeeehaw
         </p>
         <TodoList />
       </div>

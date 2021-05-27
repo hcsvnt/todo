@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-
-import TodoItemCreator from '../todoitemcreator';
-import TodoItem from '../todoitem';
+import ReactDOM from 'react-dom';
+import {Link, Switch, Route} from "react-router-dom";
 
 import {
     RecoilRoot,
@@ -10,55 +9,71 @@ import {
     useRecoilState,
     useRecoilValue,
     useSetRecoilState,
-  } from 'recoil';
+} from 'recoil';
+
+import TodoItemCreator from '../todoitemcreator';
+import TodoItem from '../todoitem';
+import TodoListFilters from '../todolistfilters';
 
 import {todoListData} from '../../App';
+import {filteredTodoListData} from '../todolistfilters';
 
-// const TodoItemCreator = () => {
-//     const [inputValue, setInputValue] = useState('');
-//     const setTodoList = useSetRecoilState(todoListData);
 
-//     function addListItem() {
-//         setTodoList((oldTodoList) => [
-//             ...oldTodoList,
-//             {
-//                 id: getId(),
-//                 text: inputValue,
-//                 isComplete: false,
-//             },
-//         ]);
-//         setInputValue('');
-//         console.log(todoListData);
-//     };
-    
-//     function handleChange({target: {value}}) {
-//         setInputValue(value);
-//     };
+const todoListStatsData = selector({
+    key: 'todoListStats',
+    get: ({get}) => {
+        const todoList = get(todoListData);
+        const total = todoList.length;
+        const totalCompleted = todoList.filter((item) => item.isComplete).length;
+        const totalToDo = total - totalCompleted;
+        const percentCompleted  = total === 0 ? 0 : Math.floor(totalCompleted / total * 100);
 
-//     return (
-//         <div>
-//             <input type="text" value={inputValue} onChange={handleChange} />
-//             <button onClick={addListItem}>Add to list</button>
-//         </div>
-//     );
-// }
+        return {
+            total,
+            totalCompleted,
+            totalToDo,
+            percentCompleted,
+        };
+    }
+});
 
-// let id = 0;
-// function getId() {
-//     return id++;
-// };
+const TodoListStats = () => {
+    const {
+        total,
+        totalCompleted,
+        totalToDo,
+        percentCompleted
+    } = useRecoilValue(todoListStatsData);
+
+    return (
+        <div>
+            <ul>
+                <li>
+                    total: {total}
+                </li>
+                <li>
+                    completed: {totalCompleted} / {percentCompleted}%
+                </li>
+                <li>
+                    to do: {totalToDo}
+                </li>
+            </ul>
+        </div>
+    )
+};
 
 const TodoList = () => {
-    const todoList = useRecoilValue(todoListData);
+    const todoList = useRecoilValue(filteredTodoListData);
     console.log(todoList)
     return (
         <div>
+            <TodoListStats />
+            <TodoListFilters />
             <TodoItemCreator />
 
             {todoList.map((todoItem) => (
                 <TodoItem key={todoItem.id} item={todoItem} />
             ))}
-          
         </div>
     )
 };
