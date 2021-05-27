@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+
+import TodoList from './components/todolist';
+
+const todoListData = atom({
+  key: 'todoListData',
+  default: [],
+});
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <RecoilRoot>
+      <div>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          speed coding challenge yeeeehaw ss
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+        <TodoList />
+      </div>
+   </RecoilRoot>
   );
 }
 
 export default App;
+
+export { todoListData };
