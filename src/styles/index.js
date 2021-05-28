@@ -1,4 +1,4 @@
-export default {
+const styles = {
     fonts: {
         main: 'Poppins',
         bold: 'Work Sans',
@@ -10,3 +10,5 @@ export default {
         acc1: '',
     }
 }
+
+export default styles

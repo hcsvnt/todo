@@ -1,19 +1,19 @@
 /** @jsxImportSource theme-ui */
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import {Link, Switch, Route} from "react-router-dom";
+// import React, { useState } from 'react';
+// import ReactDOM from 'react-dom';
+import {Switch, Route} from "react-router-dom";
 
 import {
-    RecoilRoot,
-    atom,
-    selector,
-    useRecoilState,
+    // RecoilRoot,
+    // atom,
+    // selector,
+    // useRecoilState,
     useRecoilValue,
-    useSetRecoilState,
+    // useSetRecoilState,
 } from 'recoil';
 
 import { Flex } from 'theme-ui';
-import styles from '../../styles';
+// import styles from '../../styles';
 
 
 import TodoItemCreator from '../todoitemcreator';
@@ -22,8 +22,8 @@ import TodoListFilters from '../todolistfilters';
 import TodoListStats from '../stats';
 import Search, { todoListSearchResults } from '../search';
 
-import {todoListData} from '../../App';
-import {filteredTodoListData} from '../todolistfilters';
+// import {todoListData} from '../../App';
+// import {filteredTodoListData} from '../todolistfilters';
 
 import Test from '../test';
 

@@ -1,14 +1,14 @@
 /** @jsxImportSource theme-ui */
-import React from 'react';
-import {Link, Switch, Route} from "react-router-dom";
+// import React from 'react';
+import {Link} from "react-router-dom";
 
 import {
-    RecoilRoot,
-    atom,
-    selector,
+    // RecoilRoot,
+    // atom,
+    // selector,
     useRecoilState,
-    useRecoilValue,
-    useSetRecoilState,
+    // useRecoilValue,
+    // useSetRecoilState,
   } from 'recoil';
 
 import {todoListData} from '../../App';
@@ -28,14 +28,14 @@ const TodoItem = ({item}) => {
     const [todoList, setTodoList] = useRecoilState(todoListData);
     const index = todoList.findIndex((listItem) => listItem === item);
 
-    function editItemText({target: {value}}) {
-        const newList = replaceItemAtIndex(todoList, index, {
-            ...item,
-            text: value,
-        });
+    // function editItemText({target: {value}}) {
+    //     const newList = replaceItemAtIndex(todoList, index, {
+    //         ...item,
+    //         text: value,
+    //     });
 
-        setTodoList(newList);
-    };
+    //     setTodoList(newList);
+    // };
 
     function toggleItemCompletion() {
         const newList = replaceItemAtIndex(todoList, index, {

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 import {
-    RecoilRoot,
-    atom,
-    selector,
-    useRecoilState,
-    useRecoilValue,
+    // RecoilRoot,
+    // atom,
+    // selector,
+    // useRecoilState,
+    // useRecoilValue,
     useSetRecoilState,
   } from 'recoil';
 
@@ -13,7 +13,7 @@ import Sync from '../sync';
 
 import {todoListData} from '../../App';
 
-import {apiResponseData} from '../../App';
+// import {apiResponseData} from '../../App';
 
 let id = 0;
 function getId() {
