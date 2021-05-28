@@ -64,8 +64,6 @@ const TodoListStats = () => {
     )
 };
 
-const testQuery = 'mama';
-
 const todoListSearchQuery = atom({
     key: 'todoListSearchQuery',
     default: ''
@@ -74,7 +72,7 @@ const todoListSearchQuery = atom({
 const todoListSearchResults = selector({
     key: 'todoListSearchResults',
     get: ({get}) => {
-        const todoList = get(todoListData);
+        const todoList = get(filteredTodoListData);
         const searchQuery = get(todoListSearchQuery);
 
         const searchResults = todoList.filter(item => item.text.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -86,7 +84,8 @@ const TodoList = () => {
 
     // old working stuff below this line
     const [searchQuery, setSearchQuery] = useRecoilState(todoListSearchQuery);
-    // const todoList = useRecoilValue(filteredTodoListData);  this was my list before live search
+    // const todoList = useRecoilValue(filteredTodoListData);
+    // const todoList = useRecoilValue(todoListSearchResults);
     const todoList = useRecoilValue(todoListSearchResults);
     console.log(todoList)
     console.log('pause');
