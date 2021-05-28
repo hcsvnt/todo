@@ -12,8 +12,6 @@ import {
 
 import {todoListData} from '../../App';
 
-import Test from '../test';
-
 
 function replaceItemAtIndex(arr, index, newValue) {
     return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
@@ -52,7 +50,8 @@ const TodoItem = ({item}) => {
 
     return (
         <div>
-            <input type='text' value={item.text} onChange={editItemText} />
+            <p>{item.text}</p>
+            {/* <input type='text' value={item.text} onChange={editItemText} /> */}
             <span>chars: {item.text.length} </span>
             <input 
                 type="checkbox"

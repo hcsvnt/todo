@@ -9,6 +9,8 @@ import {
     useSetRecoilState,
   } from 'recoil';
 
+import Sync from '../sync';
+
 import {todoListData} from '../../App';
 
 import {apiResponseData} from '../../App';
@@ -22,58 +24,35 @@ const TodoItemCreator = () => {
     const [inputValue, setInputValue] = useState('');
     const setTodoList = useSetRecoilState(todoListData);
 
-    // 
-
-    const [apiData, setApiData] = useRecoilState(apiResponseData);
-    console.log(apiData)
-
-    function addApiItemToList(item) {
-        setTodoList((oldTodoList) => [
-            ...oldTodoList,
-            {
-                id: getId(),
-                text: item.title,
-                isComplete: false,
-            }
-        ])
-    }
-
-    function syncData() {
-        console.log('s')
-        apiData.forEach(item => {
-            addApiItemToList(item);
-        })
-    }
-
-    // 
-
     function addListItem() {
-        setTodoList((oldTodoList) => [
-            ...oldTodoList,
-            {
-                id: getId(),
-                text: inputValue,
-                isComplete: false,
-            },
-        ]);
-        setInputValue('');
-        console.log(todoListData);
+        if (inputValue.length > 1) {
+            setTodoList((oldTodoList) => [
+                ...oldTodoList,
+                {
+                    id: getId(),
+                    text: inputValue,
+                    isComplete: false,
+                },
+            ]);
+            setInputValue('');
+        }
     };
     
     function handleChange({target: {value}}) {
         setInputValue(value);
     };
 
-    console.log(apiResponseData)
-
     return (
         <>
             <div>
-            <button onClick={syncData}>SYNC ME!</button>
+            <React.Suspense fallback={<div>Loading...</div>}>
+                <Sync id={id} getId={getId} />
+            </React.Suspense>
             </div>
             <div>
                 <input type="text" value={inputValue} onChange={handleChange} />
                 <button onClick={addListItem}>Add to list</button>
+                
             </div>
         </>
     );
