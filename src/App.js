@@ -26,10 +26,10 @@ const todoListData = atom({
 
 const apiUrl = 'https://gorest.co.in/public-api/todos';
 
-const apiData = atom({
-  key: 'apiData',
-  default: [],
-});
+// const apiData = atom({
+//   key: 'apiData',
+//   default: [],
+// });
 
 const apiResponseData = selector({
   key: 'apiResponseData',
