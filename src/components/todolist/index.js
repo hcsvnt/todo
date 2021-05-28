@@ -83,6 +83,8 @@ const todoListSearchResults = selector({
 })
 
 const TodoList = () => {
+
+    // old working stuff below this line
     const [searchQuery, setSearchQuery] = useRecoilState(todoListSearchQuery);
     // const todoList = useRecoilValue(filteredTodoListData);  this was my list before live search
     const todoList = useRecoilValue(todoListSearchResults);
