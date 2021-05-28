@@ -1,3 +1,4 @@
+/** @jsxImportSource theme-ui */
 import React from 'react';
 import { useEffect } from 'react';
 
@@ -9,7 +10,9 @@ import {
   useRecoilValue,
 } from 'recoil';
 
-// import { Themeprovider } from 'theme-ui';
+import './styles/fonts.css'
+
+import { ThemeProvider } from 'theme-ui';
 import styles from './styles';
 
 
@@ -41,11 +44,17 @@ const apiResponseData = selector({
 function App() {
  console.log(styles)
   return (
-      <div>
-        {/* <Themeprovider theme={styles}> */}
+    <div
+      sx={{
+          fontFamily: 'Poppins',
+          background: styles.colors.bg,
+          color: styles.colors.main
+          
+    }}>
+        <ThemeProvider theme={styles}>
           <Header />
           <TodoList />
-        {/* </Themeprovider> */}
+        </ThemeProvider>
       </div>
 
   );

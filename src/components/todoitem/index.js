@@ -1,3 +1,4 @@
+/** @jsxImportSource theme-ui */
 import React from 'react';
 import {Link, Switch, Route} from "react-router-dom";
 
@@ -11,6 +12,8 @@ import {
   } from 'recoil';
 
 import {todoListData} from '../../App';
+
+import styles from '../../styles';
 
 
 function replaceItemAtIndex(arr, index, newValue) {
@@ -49,10 +52,18 @@ const TodoItem = ({item}) => {
     };
 
     return (
-        <div>
-            <p>{item.text}</p>
+        <div
+            sx={{
+                background: styles.colors.mid,
+                border: '1px solid black',
+                borderRadius: '4px',
+                padding: '1rem',
+                marginBottom: '1rem' 
+            }}
+        >
+            <p>{item.text.slice(0,30)}...</p>
             {/* <input type='text' value={item.text} onChange={editItemText} /> */}
-            <span>chars: {item.text.length} </span>
+            {/* <span>chars: {item.text.length} </span> */}
             <input 
                 type="checkbox"
                 checked={item.isComplete}

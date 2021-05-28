@@ -1,3 +1,4 @@
+/** @jsxImportSource theme-ui */
 import React from 'react';
 
 import {
@@ -10,6 +11,8 @@ import {
 } from 'recoil';
 
 import { todoListData } from '../../App';
+
+import styles from '../../styles';
 
 const todoListStatsData = selector({
     key: 'todoListStats',
@@ -38,7 +41,15 @@ const TodoListStats = () => {
     } = useRecoilValue(todoListStatsData);
 
     return (
-        <div>
+        <div
+            sx={{
+                background: styles.colors.mid,
+                border: '1px solid black',
+                borderRadius: '4px',
+                padding: '1rem',
+                marginBottom: '1rem' 
+            }}
+        >
             <ul>
                 <li>
                     total: {total}

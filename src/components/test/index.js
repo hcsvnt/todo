@@ -21,9 +21,10 @@ const Test = () => {
             <span>
                 {item.text}
             </span>
-                <Link to='/'>
-                    back
-                </Link>
+            <span>chars: {item.text.length} </span>
+            <Link to='/'>
+                back
+            </Link>
         </div>
     )
 };

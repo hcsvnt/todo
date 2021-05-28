@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Poppins';
+    src: local('Poppins'),
+    url('../fonts/Poppins/Poppins-Light.ttf') format("truetype");
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: local('Work Sans'),
+    url('../fonts/Work_Sans/static/WorkSans-BlackItalic.ttf') format("truetype");
+}
+
+
+/* @font-face {
+    font-family: "GoldmanBold";
+    src: local("GoldmanBold"),
+     url("./fonts/Goldman/Goldman-Bold.ttf") format("truetype");
+    font-weight: bold;
+   }
+    */
+
+
+    .class {
+        background: #0f0f0f;
+        background: #222222;
+    }
+
+
+:root {
+    color-scheme: 'dark';
+}

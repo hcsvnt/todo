@@ -1,11 +1,12 @@
 export default {
     fonts: {
-        main: '',
-        bold: '',
+        main: 'Poppins',
+        bold: 'Work Sans',
     },
     colors: {
-        bg: '',
-        main: '',
+        bg: '#0f0f0f',
+        mid: '#222222',
+        main: 'white',
         acc1: '',
     }
 }

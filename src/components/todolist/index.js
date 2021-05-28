@@ -1,3 +1,4 @@
+/** @jsxImportSource theme-ui */
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import {Link, Switch, Route} from "react-router-dom";
@@ -10,6 +11,10 @@ import {
     useRecoilValue,
     useSetRecoilState,
 } from 'recoil';
+
+import { Flex } from 'theme-ui';
+import styles from '../../styles';
+
 
 import TodoItemCreator from '../todoitemcreator';
 import TodoItem from '../todoitem';
@@ -33,15 +38,30 @@ const TodoList = () => {
         <div>
             <Switch>
                 <Route exact path='/'>
-                    <TodoListStats />
-                    <TodoListFilters />
+                    <Flex>
+                        <TodoListStats />
+                        <TodoListFilters />
+                    </Flex>
                     <TodoItemCreator />
 
                     <Search />
-
-                    {todoList.map((todoItem) => (
-                        <TodoItem key={todoItem.id} item={todoItem} />
-                        ))}
+                    {/* <Flex> */}
+                    <div
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        // set this to `minHeight: '100vh'` for full viewport height
+                        // minHeight: 256,
+                        // border: '5px solid black',
+                        // padding: '1rem',
+                        fontSize: '16px',
+                        fontFamily: 'main'
+                    }}>
+                        {todoList.map((todoItem) => (
+                            <TodoItem key={todoItem.id} item={todoItem} />
+                            ))}
+                    </div>
+                    {/* </Flex> */}
                 </Route>
                 <Route path='/items/:Id'>
                     <Test />

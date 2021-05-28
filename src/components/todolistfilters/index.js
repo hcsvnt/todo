@@ -11,6 +11,8 @@ import {
 
 import {todoListData} from '../../App';
 
+import styles from '../../styles';
+
 
 const todoListFilterData = atom({
     key: 'todoFilterListData',
@@ -42,7 +44,15 @@ const TodoListFilters = () => {
     };
 
     return (
-        <div>
+        <div
+            sx={{
+                background: styles.colors.mid,
+                border: '1px solid black',
+                borderRadius: '4px',
+                padding: '1rem',
+                marginBottom: '1rem' 
+            }}
+        >
             Filter:
             <select value={filter} onChange={updateFilter}>
                 <option value="All">All</option>
