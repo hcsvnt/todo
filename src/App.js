@@ -9,7 +9,7 @@ import {
   useRecoilValue,
 } from 'recoil';
 
-import { Themeprovider } from 'theme-ui';
+// import { Themeprovider } from 'theme-ui';
 import styles from './styles';
 
 
@@ -42,10 +42,10 @@ function App() {
  console.log(styles)
   return (
       <div>
-        <Themeprovider theme={styles}>
+        {/* <Themeprovider theme={styles}> */}
           <Header />
           <TodoList />
-        </Themeprovider>
+        {/* </Themeprovider> */}
       </div>
 
   );
