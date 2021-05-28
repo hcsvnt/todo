@@ -1,16 +1,16 @@
 import React from 'react';
 
 import {
-    RecoilRoot,
+    // RecoilRoot,
     atom,
     selector,
     useRecoilState,
-    useRecoilValue,
-    useSetRecoilState,
+    // useRecoilValue,
+    // useSetRecoilState,
 } from 'recoil';
 
 import { filteredTodoListData } from '../todolistfilters';
-import styles from '../../styles';
+// import styles from '../../styles';
 
 const todoListSearchQuery = atom({
     key: 'todoListSearchQuery',

@@ -1,8 +1,8 @@
 /** @jsxImportSource theme-ui */
-import React from 'react';
-import { Box } from 'theme-ui';
+// import React from 'react';
+// import { Box } from 'theme-ui';
 
-import styles from '../../styles';
+// import styles from '../../styles';
 
 const Header = () => {
     return (

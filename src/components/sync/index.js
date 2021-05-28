@@ -1,11 +1,11 @@
 import React from 'react';
 
 import {
-    RecoilRoot,
-    atom,
-    selector,
+    // RecoilRoot,
+    // atom,
+    // selector,
     useRecoilState,
-    useRecoilValue,
+    // useRecoilValue,
     useSetRecoilState,
   } from 'recoil';
 
@@ -15,7 +15,7 @@ import {apiResponseData} from '../../App';
 
 const Sync = ({id, getId}) => {
     const setTodoList = useSetRecoilState(todoListData);
-    const [apiData, setApiData] = useRecoilState(apiResponseData);
+    const [apiData] = useRecoilState(apiResponseData);
 
     function addApiItemToList(item) {
         setTodoList((oldTodoList) => [

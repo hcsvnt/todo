@@ -1,13 +1,13 @@
 /** @jsxImportSource theme-ui */
-import React from 'react';
-import { useEffect } from 'react';
+// import React from 'react';
+// import { useEffect } from 'react';
 
 import {
-  RecoilRoot,
+  // RecoilRoot,
   atom,
   selector,
-  useRecoilState,
-  useRecoilValue,
+  // useRecoilState,
+  // useRecoilValue,
 } from 'recoil';
 
 import './styles/fonts.css'

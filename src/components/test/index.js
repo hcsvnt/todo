@@ -1,19 +1,19 @@
 import React from 'react';
-import {Link, Switch, Route, useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 import {
-    RecoilRoot,
-    atom,
-    selector,
+    // RecoilRoot,
+    // atom,
+    // selector,
     useRecoilState,
-    useRecoilValue,
-    useSetRecoilState,
+    // useRecoilValue,
+    // useSetRecoilState,
   } from 'recoil';
 
 import {todoListData} from '../../App';
 
 const Test = () => {
-    const [todoList, setTodoList] = useRecoilState(todoListData);
+    const [todoList] = useRecoilState(todoListData);
     let {Id} = useParams();
     const item = todoList[Id]
     return (
