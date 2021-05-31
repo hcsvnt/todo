@@ -25,7 +25,7 @@ import Test from '../test';
 
 import { myUserId } from '../../App';
 
-import Filters, { filters, filterData, userFilters, userFilterData } from '../todolistfilters';
+import Filters, { filters, filterData, userFilters, userFilterData, searchFilter } from '../todolistfilters';
 
 const currentPage = atom({
     key: 'currentPage',
@@ -60,9 +60,10 @@ const apiResponseData = selector({
         let pageNumber = get(currentPage)
         let query = get(userFilterData)
         let filter = get(filterData)
+        let search = get(searchFilter)
         // let response = await fetch(query)
         // let response = await fetch(`${query}${filter}?page=${pageNumber}`);
-        let response = await fetch(`${query}${filter}`);
+        let response = await fetch(`${query}${filter}${search}`);
 
         let result = await response.json();
         if (response.error) {

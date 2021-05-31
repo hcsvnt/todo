@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
     atom,
@@ -54,21 +54,37 @@ const userFilterData = selector({
     },
 });
 
+const searchFilter= atom({
+    key: 'searchFilter',
+    default: ''
+})
+
 
 const Filters = () => {
-    const [page, setPage] = useRecoilState(currentPage)
+    const [page, setPage] = useRecoilState(currentPage);
     const [filter, setFilter] = useRecoilState(filters);
     const [userFilter, setUserFilter] = useRecoilState(userFilters);
-
+    const [search, setSearch] = useRecoilState(searchFilter);
+    const [userSearch, setUserSearch] = useState('')
     function updateFilter({target: {value}}) {
         setFilter(value);
-        setPage(1)
+        setPage(1);
     };
 
     function updateUserFilter({target: {value}}) {
         setUserFilter(value);
-        setPage(1)
+        setPage(1);
     };
+
+    function handleUserSearch({target: {value}}) {
+        setUserSearch(value);
+
+    }
+
+    function updateSearchFilter() {
+        setSearch(`?title=${userSearch}`);
+        setPage(1);
+    }
 
       return (
         <div
@@ -90,6 +106,8 @@ const Filters = () => {
             <option value="Team">Team</option>
             <option value="Me">Me</option>
         </select>
+        <input type="text" value={userSearch} onChange={handleUserSearch} placeholder="search..."/>
+        <input type="submit" onClick={updateSearchFilter} value="xxx" />
     </div>
       )
 };
@@ -100,5 +118,6 @@ export default Filters;
 export {    filters,
             filterData,
             userFilters,
-            userFilterData
+            userFilterData,
+            searchFilter
         };
