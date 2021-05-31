@@ -10,7 +10,7 @@ import {
     // useSetRecoilState,
 } from 'recoil';
 
-import { todoListData } from '../../App';
+import { todoListData } from '../../components/todolist';
 
 import styles from '../../styles';
 

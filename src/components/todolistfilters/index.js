@@ -9,7 +9,6 @@ import {
     // useSetRecoilState,
   } from 'recoil';
 
-import {todoListData} from '../../App';
 
 import styles from '../../styles';
 
@@ -19,25 +18,25 @@ const todoListFilterData = atom({
     default: 'All',
 });
 
-const filteredTodoListData = selector({
-    key: 'filteredTodoListData',
-    get: ({get}) => {
-        const filter = get(todoListFilterData);
-        const list = get(todoListData);
+// const filteredTodoListData = selector({
+//     key: 'filteredTodoListData',
+//     get: ({get}) => {
+//         const filter = get(todoListFilterData);
+//         const list = get(todoListData);
 
-        switch (filter) {
-            case 'Completed':
-                return list.filter((item) => item.isComplete);
-            case 'To do':
-                return list.filter((item) => !item.isComplete);
-            default:
-                return list;
-        }
-    },
-});
+//         switch (filter) {
+//             case 'Completed':
+//                 return list.filter((item) => item.isComplete);
+//             case 'To do':
+//                 return list.filter((item) => !item.isComplete);
+//             default:
+//                 return list;
+//         }
+//     },
+// });
 
 const TodoListFilters = () => {
-    const [filter, setFilter] = useRecoilState(todoListFilterData);
+    // const [filter, setFilter] = useRecoilState(todoListFilterData);
 
     function updateFilter({target: {value}}) {
         setFilter(value);
@@ -66,4 +65,4 @@ const TodoListFilters = () => {
 
 export default TodoListFilters;
 
-export { filteredTodoListData };
+// export { filteredTodoListData };

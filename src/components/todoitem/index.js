@@ -11,44 +11,39 @@ import {
     // useSetRecoilState,
   } from 'recoil';
 
-import {todoListData} from '../../App';
-
 import styles from '../../styles';
 
 
-function replaceItemAtIndex(arr, index, newValue) {
-    return [...arr.slice(0, index), newValue, ...arr.slice(index + 1)];
-  }
-  
-  function removeItemAtIndex(arr, index) {
-    return [...arr.slice(0, index), ...arr.slice(index + 1)];
-  }
 
 const TodoItem = ({item}) => {
-    const [todoList, setTodoList] = useRecoilState(todoListData);
-    const index = todoList.findIndex((listItem) => listItem === item);
+   
 
     // function editItemText({target: {value}}) {
     //     const newList = replaceItemAtIndex(todoList, index, {
     //         ...item,
     //         text: value,
+    //          updated_at: dateAndTime
     //     });
 
     //     setTodoList(newList);
     // };
 
-    function toggleItemCompletion() {
-        const newList = replaceItemAtIndex(todoList, index, {
-            ...item,
-            isComplete: !item.isComplete,
-        });
-        setTodoList(newList);
-    };
+   
 
     function deleteItem() {
-        const newList = removeItemAtIndex(todoList, index);
-        
-        setTodoList(newList)
+       
+
+        fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
+            method: 'DELETE',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 8cada2f6a84512ab619e0e8dbfbfadfb466088b82e4b763f5a0cef36268eb609'
+            }
+            }).then(res =>  {
+            return res.json()
+            })
+            .then(data => console.log(data))
+            .catch(error => console.log('Error'))
     };
 
     return (
@@ -61,13 +56,13 @@ const TodoItem = ({item}) => {
                 marginBottom: '1rem' 
             }}
         >
-            <p>{item.text.slice(0,30)}...</p>
+            <p>{item.title.slice(0,30)}...</p>
             {/* <input type='text' value={item.text} onChange={editItemText} /> */}
             {/* <span>chars: {item.text.length} </span> */}
             <input 
                 type="checkbox"
-                checked={item.isComplete}
-                onChange={toggleItemCompletion}
+                checked={item.completed}
+                // onChange={toggleItemCompletion}
                 />
             <button onClick={deleteItem}>delete</button>
             <Link to={`/items/${item.id}`}>

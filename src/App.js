@@ -1,13 +1,12 @@
 /** @jsxImportSource theme-ui */
-// import React from 'react';
-// import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   // RecoilRoot,
   atom,
   selector,
-  // useRecoilState,
-  // useRecoilValue,
+  useRecoilState,
+  useRecoilValue,
 } from 'recoil';
 
 import './styles/fonts.css'
@@ -15,34 +14,56 @@ import './styles/fonts.css'
 import { ThemeProvider } from 'theme-ui';
 import styles from './styles';
 
-
 import Header from './components/header';
 import TodoList from './components/todolist';
 
-const todoListData = atom({
-  key: 'todoListData',
-  default: [],
-});
 
-const apiUrl = 'https://gorest.co.in/public-api/todos';
+const apiKeyKey = process.env.REACT_APP_API_KEY;
+const apiKey = `Bearer ${apiKeyKey}`;
 
-// const apiData = atom({
-//   key: 'apiData',
-//   default: [],
-// });
+const apiKeyState = atom({
+  key: 'apiKeyState',
+  default: apiKey
+})
 
-const apiResponseData = selector({
-  key: 'apiResponseData',
-  get: async ({get}) => {
-    const response =  await fetch(apiUrl);
-    const result = await response.json()
-    const apiData = result.data
-    return apiData
-  }
-});
+// fetch('https://gorest.co.in//public-api/todos?pages')
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log(data.meta.pagination)
+//     })
+
+
+const myUser = {
+  name: 'Halix321',
+  email: 'canbe@blank.com',
+  gender: 'Male',
+  status: 'Active'
+};
+
+function mkUsr(userData) {
+  fetch(`https://gorest.co.in//public-api/users`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': apiKey,
+        },
+        body: JSON.stringify(userData)
+        }).then(response =>  {
+        return response.json()
+        })
+          .then(data => {
+            console.log(data)
+            // console.log(data.meta.pagination)
+
+          })
+            .catch(error => console.log('Error'))
+};
 
 function App() {
- console.log(styles)
+
+  // useEffect(() => {
+  // },[])
+
   return (
     <div
       sx={{
@@ -53,7 +74,9 @@ function App() {
     }}>
         <ThemeProvider theme={styles}>
           <Header />
-          <TodoList />
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <TodoList />
+          </React.Suspense>          
         </ThemeProvider>
       </div>
 
@@ -62,5 +85,8 @@ function App() {
 
 export default App;
 
-export { todoListData,
-        apiResponseData };
+export { 
+        // todoListData,
+        // apiResponseData,
+        // currentPage,
+        apiKeyState };

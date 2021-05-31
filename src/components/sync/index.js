@@ -1,43 +1,47 @@
-import React from 'react';
+// import React from 'react';
 
-import {
-    // RecoilRoot,
-    // atom,
-    // selector,
-    useRecoilState,
-    // useRecoilValue,
-    useSetRecoilState,
-  } from 'recoil';
+// import {
+//     // RecoilRoot,
+//     // atom,
+//     // selector,
+//     useRecoilState,
+//     // useRecoilValue,
+//     useSetRecoilState,
+//   } from 'recoil';
 
-import { todoListData } from '../../App';
-import {apiResponseData} from '../../App';
+// import { todoListData } from '../../App';
+// import {apiResponseData} from '../../App';
 
 
-const Sync = ({id, getId}) => {
-    const setTodoList = useSetRecoilState(todoListData);
-    const [apiData] = useRecoilState(apiResponseData);
+// const Sync = () => {
+//     const setTodoList = useSetRecoilState(todoListData);
+//     const [apiData] = useRecoilState(apiResponseData);
 
-    function addApiItemToList(item) {
-        setTodoList((oldTodoList) => [
-            ...oldTodoList,
-            {
-                id: getId(),
-                text: item.title,
-                isComplete: false,
-            }
-        ])
-    };
+//     console.log(apiData)
 
-    function syncData() {
-        apiData.forEach(item => {
-            addApiItemToList(item);
-        })
-    };
-    return (
-        <div>
-            <button onClick={syncData}>SYNC ME!</button>  
-        </div>
-    )
-};
+//     function addApiItemToList(item) {
+//         setTodoList((oldTodoList) => [
+//             ...oldTodoList,
+//             {
+//                 id: item.id,
+//                 title: item.title,
+//                 completed: item.completed,
+//                 created_at: item.created_at,
+//                 updated_at: item.updated_at,
+//             }
+//         ])
+//     };
 
-export default Sync;
+//     function syncData() {
+//         apiData.forEach(item => {
+//             addApiItemToList(item);
+//         })
+//     };
+//     return (
+//         <div>
+//             <button onClick={syncData}>SYNC ME!</button>  
+//         </div>
+//     )
+// };
+
+// export default Sync;

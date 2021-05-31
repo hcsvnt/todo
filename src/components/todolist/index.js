@@ -1,67 +1,97 @@
 /** @jsxImportSource theme-ui */
-// import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import ReactDOM from 'react-dom';
 import {Switch, Route} from "react-router-dom";
 
 import {
-    // RecoilRoot,
-    // atom,
-    // selector,
-    // useRecoilState,
+    RecoilRoot,
+    atom,
+    selector,
+    useRecoilState,
     useRecoilValue,
-    // useSetRecoilState,
+    useSetRecoilState,
 } from 'recoil';
 
-import { Flex } from 'theme-ui';
+import { Flex, get } from 'theme-ui';
 // import styles from '../../styles';
 
 
 import TodoItemCreator from '../todoitemcreator';
 import TodoItem from '../todoitem';
-import TodoListFilters from '../todolistfilters';
-import TodoListStats from '../stats';
-import Search, { todoListSearchResults } from '../search';
 
-// import {todoListData} from '../../App';
-// import {filteredTodoListData} from '../todolistfilters';
+import { apiKeyState } from '../../App';
 
 import Test from '../test';
 
+const currentPage = atom({
+    key: 'currentPage',
+    default: 1
+  })
+
+const apiResponseData = selector({
+    key: 'apiResponseData',
+    get: async ({get}) => {
+        const pageNumber = get(currentPage)
+        // const response =  await fetch(`https://gorest.co.in//public-api/users/2687/todos?page=${pageNumber}`);
+        const response =  await fetch(`https://gorest.co.in//public-api/todos?page=${pageNumber}`);
+        const result = await response.json();
+        if (response.error) {
+            console.error(response.error);
+        }
+        const totalPages = result.meta.pagination.pages
+        let apiData = result.data
+        console.log(result)
+        console.log(result.meta.pagination)
+        return {
+            apiData,
+            totalPages
+        }
+        }
+  });
+
+
+const TodoListPage = () => {
+    const { apiData, totalPages } = useRecoilValue(apiResponseData);
+    return (
+        <div>
+            {apiData.map(item => (
+                <TodoItem item={item} />
+            ) )}
+
+        </div>
+    )
+}
 
 const TodoList = () => {
-    const todoList = useRecoilValue(todoListSearchResults);
-    console.log(todoList)
-    console.log('pause');
-    const searchResults = useRecoilValue(todoListSearchResults);
-    console.log(searchResults)
+    const { apiData, totalPages } = useRecoilValue(apiResponseData);
+    const [page, setPage] = useRecoilState(currentPage)
+
     return (
         <div>
             <Switch>
                 <Route exact path='/'>
                     <Flex>
-                        <TodoListStats />
-                        <TodoListFilters />
+                        {/* <TodoListStats />
+                        <TodoListFilters /> */}
                     </Flex>
                     <TodoItemCreator />
-
-                    <Search />
-                    {/* <Flex> */}
+                    {/* <Search /> */}
+                    {page} of
+                    {totalPages}
+                    <button onClick={() => setPage(page - 1)}>-</button>
+                    <button onClick={() => setPage(page + 1)}>+</button>
+                    <button onClick={() => setPage(totalPages)}>last</button>
                     <div
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        // set this to `minHeight: '100vh'` for full viewport height
-                        // minHeight: 256,
-                        // border: '5px solid black',
-                        // padding: '1rem',
                         fontSize: '16px',
-                        fontFamily: 'main'
+                        fontFamily: 'main',
+                        // background: 'green'
                     }}>
-                        {todoList.map((todoItem) => (
-                            <TodoItem key={todoItem.id} item={todoItem} />
-                            ))}
+                        {/* total oages. for each ... pass page number up to fetch how to do router use atom current page */}
+                   <TodoListPage />
                     </div>
-                    {/* </Flex> */}
                 </Route>
                 <Route path='/items/:Id'>
                     <Test />
@@ -73,3 +103,12 @@ const TodoList = () => {
 
 
 export default TodoList;
+
+// export {
+//     currentPage
+// }
+
+export {
+    // todoListData,
+    apiResponseData
+}
