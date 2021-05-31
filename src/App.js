@@ -32,6 +32,39 @@ const apiKeyState = atom({
 //       console.log(data.meta.pagination)
 //     })
 
+// fetch('https://gorest.co.in//public-api/users/2687')
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log(data)
+//     })
+
+fetch(`https://gorest.co.in//public-api/users/2687/todos?completed=true`, {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': apiKey,
+        },
+        // body: JSON.stringify({
+        //   gender: 'Male'
+        // })
+        }).then(response =>  {
+        return response.json()
+        })
+          .then(data => {
+            console.log(data)
+            // console.log(data.meta.pagination)
+
+          })
+            .catch(error => console.log('Error'))
+
+            // public-api/todos?completed=true
+            // public-api/todos?completed=false
+            // public-api/todos?title=MYQUERY\
+            // title=mleko EXAMPLE
+            // public-api/users/2687/todos?completed=true
+
+    
+
 
 const myUser = {
   name: 'Halix321',

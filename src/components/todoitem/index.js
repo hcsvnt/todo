@@ -14,11 +14,20 @@ import {
 import styles from '../../styles';
 
 import {apiKeyState} from '../../App'
+import { useEffect, useState } from "react";
+
+
 
 
 
 const TodoItem = ({item}) => {
     const apiKey = useRecoilValue(apiKeyState)
+
+    const [title, setTitle] = useState(item.title)
+
+    // useEffect(() => {
+    //     setTitle(item.title)
+    // },[title])
    
 
     // function editItemText({target: {value}}) {
@@ -30,6 +39,8 @@ const TodoItem = ({item}) => {
 
     //     setTodoList(newList);
     // };
+
+    
 
     function toggleItemCompletion() {
         fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
@@ -63,6 +74,30 @@ const TodoItem = ({item}) => {
             .catch(error => console.log('Error'))
     };
 
+    function editItemText(e) {
+        console.log('editin')
+        setTitle(e.target.value)
+    }
+
+    function submitChange() {
+        console.log('submit')
+        fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
+            method: 'PATCH',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': apiKey
+            },
+            body: JSON.stringify(
+                {title: title}
+            ) 
+            }).then(res =>  {
+            return res.json()
+            })
+            .then(data => console.log(data))
+            .catch(error => console.log('Error'))
+
+    }
+
     return (
         <div
             sx={{
@@ -74,7 +109,9 @@ const TodoItem = ({item}) => {
             }}
         >
             <p>{item.title.slice(0,30)}...</p>
-            {/* <input type='text' value={item.text} onChange={editItemText} /> */}
+            <input type='text' value={item.title} onChange={editItemText} />
+            {/* how to make controlled input here */}
+            <button onClick={submitChange}>sub</button>
             {/* <span>chars: {item.text.length} </span> */}
             <input 
                 type="checkbox"
