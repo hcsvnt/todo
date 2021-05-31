@@ -9,10 +9,12 @@ import {
     useSetRecoilState,
   } from 'recoil';
 
-import { apiKeyState } from '../../App';
+import { apiKeyState, myUserId } from '../../App';
+
 
 const TodoItemCreator = () => {
     const apiKey = useRecoilState(apiKeyState)
+    const userId = useRecoilValue(myUserId);
     const [inputValue, setInputValue] = useState('');
 
     const postData = {
@@ -26,7 +28,7 @@ const TodoItemCreator = () => {
     };
 
     function postToApi(inputData) {
-        fetch(`https://gorest.co.in//public-api/users/2687/todos`, {
+        fetch(`https://gorest.co.in/public-api/users/${userId}/todos`, {
               method: 'POST',
               headers: {
               'Content-Type': 'application/json',
@@ -43,7 +45,7 @@ const TodoItemCreator = () => {
     function addToApiList() {
         postToApi(postData)
     };
-
+    console.log(userId)
     return (
         <div>
             <input 

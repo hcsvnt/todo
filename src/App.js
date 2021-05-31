@@ -26,36 +26,36 @@ const apiKeyState = atom({
   default: apiKey
 })
 
-// fetch('https://gorest.co.in//public-api/todos?pages')
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log(data.meta.pagination)
-//     })
+fetch('https://gorest.co.in/public-api/todos?completed=false')
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+    })
 
-// fetch('https://gorest.co.in//public-api/users/2687')
+// fetch('https://gorest.co.in/public-api/users/2687')
 //     .then(res => res.json())
 //     .then(data => {
 //       console.log(data)
 //     })
 
-fetch(`https://gorest.co.in//public-api/users/2687/todos?completed=true`, {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': apiKey,
-        },
-        // body: JSON.stringify({
-        //   gender: 'Male'
-        // })
-        }).then(response =>  {
-        return response.json()
-        })
-          .then(data => {
-            console.log(data)
-            // console.log(data.meta.pagination)
+// fetch(`https://gorest.co.in/public-api/users/2687/todos?completed=true`, {
+//         method: 'GET',
+//         headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': apiKey,
+//         },
+//         // body: JSON.stringify({
+//         //   gender: 'Male'
+//         // })
+//         }).then(response =>  {
+//         return response.json()
+//         })
+//           .then(data => {
+//             console.log(data)
+//             // console.log(data.meta.pagination)
 
-          })
-            .catch(error => console.log('Error'))
+//           })
+//             .catch(error => console.log('Error'))
 
             // public-api/todos?completed=true
             // public-api/todos?completed=false
@@ -74,7 +74,7 @@ const myUser = {
 };
 
 function mkUsr(userData) {
-  fetch(`https://gorest.co.in//public-api/users`, {
+  fetch(`https://gorest.co.in/public-api/users`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
@@ -91,6 +91,12 @@ function mkUsr(userData) {
           })
             .catch(error => console.log('Error'))
 };
+// mkUsr(myUser)
+
+const myUserId = atom({
+  key: 'myUserId',
+  default: '3593'
+})
 
 function App() {
 
@@ -122,4 +128,6 @@ export {
         // todoListData,
         // apiResponseData,
         // currentPage,
-        apiKeyState };
+        apiKeyState,
+        myUserId,
+       };

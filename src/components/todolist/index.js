@@ -23,15 +23,19 @@ import { apiKeyState } from '../../App';
 
 import Test from '../test';
 
+import { myUserId } from '../../App';
+
+import Filters, { filters, filterData, userFilters, userFilterData } from '../todolistfilters';
+
 const currentPage = atom({
     key: 'currentPage',
     default: 1
   })
 
-const query = atom({
-    key: 'query',
-    default: `https://gorest.co.in//public-api/todos`
-})
+// const query = atom({
+//     key: 'query',
+//     default: `https://gorest.co.in//public-api/todos`
+// })
 
  // public-api/todos?completed=true
 // public-api/todos?completed=false
@@ -41,15 +45,25 @@ const query = atom({
 
 // need to set page=1 when params change
 
+ // const response =  await fetch(`https://gorest.co.in//public-api/users/2687/todos?page=${pageNumber}`);
+// const response =  await fetch(`https://gorest.co.in//public-api/todos?page=${pageNumber}`);
+// let response =  await fetch(`https://gorest.co.in//public-api/todos${filter}?page=${pageNumber}`);
+
+// let response = await fetch(`${query}${filter}?page=${pageNumber}`);
+// let response =  await fetch('https://gorest.co.in/public-api/todos');
+
+ // let stdQuery = get(query)
+
 const apiResponseData = selector({
     key: 'apiResponseData',
     get: async ({get}) => {
         let pageNumber = get(currentPage)
-        let stdQuery = get(query)
+        let query = get(userFilterData)
         let filter = get(filterData)
-        // const response =  await fetch(`https://gorest.co.in//public-api/users/2687/todos?page=${pageNumber}`);
-        // const response =  await fetch(`https://gorest.co.in//public-api/todos?page=${pageNumber}`);
-        let response =  await fetch(`https://gorest.co.in//public-api/todos${filter}?page=${pageNumber}`);
+        // let response = await fetch(query)
+        // let response = await fetch(`${query}${filter}?page=${pageNumber}`);
+        let response = await fetch(`${query}${filter}`);
+
         let result = await response.json();
         if (response.error) {
             console.error(response.error);
@@ -65,56 +79,6 @@ const apiResponseData = selector({
         }
         }
   });
-
-
-const filters = atom({
-    key: 'filter',
-    default: 'All',
-});
-
-const filterData = selector({
-    key: 'filterData',
-    get: ({get}) => {
-        const filterData = get(filters);
-        // const list = get(apiResponseData);
-
-        switch (filterData) {
-            case 'Completed':
-                return '?completed=true'
-            case 'To do':
-                return '?completed=false'
-            default:
-                return '';
-        }
-    },
-});
-
-  const Filters = () => {
-    const [filter, setFilter] = useRecoilState(filters);
-
-    function updateFilter({target: {value}}) {
-        setFilter(value);
-    };
-      return (
-        <div
-        sx={{
-            background: styles.colors.mid,
-            border: '1px solid black',
-            borderRadius: '4px',
-            padding: '1rem',
-            marginBottom: '1rem' 
-        }}
-    >
-        Filter:
-        <select value={filter} onChange={updateFilter}>
-            <option value="All">All</option>
-            <option value="Completed">Completed</option>
-            <option value="To do">To do</option>
-        </select>
-    </div>
-      )
-  }
-
 
 const TodoListPage = () => {
     const { apiData, totalPages } = useRecoilValue(apiResponseData);
@@ -177,5 +141,7 @@ export default TodoList;
 
 export {
     // todoListData,
-    apiResponseData
+    apiResponseData,
+    currentPage,
+    // query
 }

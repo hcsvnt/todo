@@ -1,68 +1,104 @@
 import React from 'react';
 
 import {
-    // RecoilRoot,
     atom,
     selector,
     useRecoilState,
-    // useRecoilValue,
-    // useSetRecoilState,
   } from 'recoil';
 
+import { currentPage } from '../todolist';
 
 import styles from '../../styles';
 
-
-const todoListFilterData = atom({
-    key: 'todoFilterListData',
-    default: 'All',
+const filters = atom({
+    key: 'filter',
+    default: ''
 });
 
-// const filteredTodoListData = selector({
-//     key: 'filteredTodoListData',
-//     get: ({get}) => {
-//         const filter = get(todoListFilterData);
-//         const list = get(todoListData);
+const filterData = selector({
+    key: 'filterData',
+    get: ({get}) => {
+        const filterData = get(filters);
 
-//         switch (filter) {
-//             case 'Completed':
-//                 return list.filter((item) => item.isComplete);
-//             case 'To do':
-//                 return list.filter((item) => !item.isComplete);
-//             default:
-//                 return list;
-//         }
-//     },
-// });
+        switch (filterData) {
+            case 'All':
+                return ''
+            case 'To do':
+                return '?completed=false'
+            case 'Completed':
+                return '?completed=true'
+            default:
+                return '';
+        }
+    },
+});
 
-const TodoListFilters = () => {
-    // const [filter, setFilter] = useRecoilState(todoListFilterData);
+const userFilters = atom({
+    key: 'userFilters',
+    default: 'https://gorest.co.in/public-api/todos',
+});
+
+const userFilterData = selector({
+    key: 'userFilterData',
+    get: ({get}) => {
+        const userFilterData = get(userFilters);
+
+        switch (userFilterData) {
+            case 'Me':
+                return 'https://gorest.co.in/public-api/users/3593/todos'
+            case 'Team':
+                return 'https://gorest.co.in/public-api/todos'
+            default:
+                return 'https://gorest.co.in/public-api/todos';
+        }
+    },
+});
+
+
+const Filters = () => {
+    const [page, setPage] = useRecoilState(currentPage)
+    const [filter, setFilter] = useRecoilState(filters);
+    const [userFilter, setUserFilter] = useRecoilState(userFilters);
 
     function updateFilter({target: {value}}) {
         setFilter(value);
+        setPage(1)
     };
 
-    return (
+    function updateUserFilter({target: {value}}) {
+        setUserFilter(value);
+        setPage(1)
+    };
+
+      return (
         <div
-            sx={{
-                background: styles.colors.mid,
-                border: '1px solid black',
-                borderRadius: '4px',
-                padding: '1rem',
-                marginBottom: '1rem' 
-            }}
-        >
-            Filter:
-            <select value={filter} onChange={updateFilter}>
-                <option value="All">All</option>
-                <option value="Completed">Completed</option>
-                <option value="To do">To do</option>
-            </select>
-        </div>
-    )
+        sx={{
+            background: styles.colors.mid,
+            border: '1px solid black',
+            borderRadius: '4px',
+            padding: '1rem',
+            marginBottom: '1rem' 
+        }}
+    >
+        Filter:
+        <select value={filter} onChange={updateFilter}>
+            <option value="All">All</option>
+            <option value="To do">To do</option>
+            <option value="Completed">Completed</option>
+        </select>
+        <select value={userFilter} onChange={updateUserFilter}>
+            <option value="Team">Team</option>
+            <option value="Me">Me</option>
+        </select>
+    </div>
+      )
 };
 
 
-export default TodoListFilters;
+export default Filters;
 
-// export { filteredTodoListData };
+export {    filters,
+            filterData,
+            userFilters,
+            userFilterData
+        };
