@@ -6,16 +6,19 @@ import {
     // RecoilRoot,
     // atom,
     // selector,
-    useRecoilState,
+    useRecoilState, useRecoilValue,
     // useRecoilValue,
     // useSetRecoilState,
   } from 'recoil';
 
 import styles from '../../styles';
 
+import {apiKeyState} from '../../App'
+
 
 
 const TodoItem = ({item}) => {
+    const apiKey = useRecoilValue(apiKeyState)
    
 
     // function editItemText({target: {value}}) {
@@ -28,16 +31,30 @@ const TodoItem = ({item}) => {
     //     setTodoList(newList);
     // };
 
+    function toggleItemCompletion() {
+        fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
+            method: 'PATCH',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': apiKey
+            },
+            body: JSON.stringify(
+                {completed: !item.completed}
+            ) 
+            }).then(res =>  {
+            return res.json()
+            })
+            .then(data => console.log(data))
+            .catch(error => console.log('Error'))
+    }
    
 
     function deleteItem() {
-       
-
         fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
             method: 'DELETE',
             headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 8cada2f6a84512ab619e0e8dbfbfadfb466088b82e4b763f5a0cef36268eb609'
+            'Authorization': apiKey
             }
             }).then(res =>  {
             return res.json()
@@ -62,7 +79,7 @@ const TodoItem = ({item}) => {
             <input 
                 type="checkbox"
                 checked={item.completed}
-                // onChange={toggleItemCompletion}
+                onChange={toggleItemCompletion}
                 />
             <button onClick={deleteItem}>delete</button>
             <Link to={`/items/${item.id}`}>
