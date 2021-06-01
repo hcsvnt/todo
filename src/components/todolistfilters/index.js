@@ -7,6 +7,7 @@ import {
   } from 'recoil';
 
 import { currentPage } from '../todolist';
+import { myUserId } from '../../App';
 
 import styles from '../../styles';
 
@@ -42,10 +43,11 @@ const userFilterData = selector({
     key: 'userFilterData',
     get: ({get}) => {
         const userFilterData = get(userFilters);
+        const userId = get(myUserId)
 
         switch (userFilterData) {
             case 'Me':
-                return 'https://gorest.co.in/public-api/users/3593/todos'
+                return `https://gorest.co.in/public-api/users/${userId}/todos`
             case 'Team':
                 return 'https://gorest.co.in/public-api/todos'
             default:
@@ -65,7 +67,8 @@ const Filters = () => {
     const [filter, setFilter] = useRecoilState(filters);
     const [userFilter, setUserFilter] = useRecoilState(userFilters);
     const [search, setSearch] = useRecoilState(searchFilter);
-    const [userSearch, setUserSearch] = useState('')
+    const [userSearch, setUserSearch] = useState('');
+
     function updateFilter({target: {value}}) {
         setFilter(value);
         setPage(1);
@@ -83,6 +86,9 @@ const Filters = () => {
 
     function updateSearchFilter() {
         setSearch(`?title=${userSearch}`);
+        if (userSearch === '') {
+            setSearch('')
+        }
         setPage(1);
     }
 

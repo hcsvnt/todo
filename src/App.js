@@ -26,11 +26,16 @@ const apiKeyState = atom({
   default: apiKey
 })
 
-fetch('https://gorest.co.in/public-api/todos?completed=false')
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-    })
+const myUserId = atom({
+  key: 'myUserId',
+  default: '2639'
+})
+
+// fetch('https://gorest.co.in/public-api/users/2639/todos?completed=true')
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log(data)
+//     })
 
 // fetch('https://gorest.co.in/public-api/users/2687')
 //     .then(res => res.json())
@@ -73,6 +78,13 @@ const myUser = {
   status: 'Active'
 };
 
+const testUser = {
+  name: 'Meme4321',
+  email: 'canbe@notblank.com',
+  gender: 'Male',
+  status: 'Active'
+};
+
 function mkUsr(userData) {
   fetch(`https://gorest.co.in/public-api/users`, {
         method: 'POST',
@@ -93,14 +105,46 @@ function mkUsr(userData) {
 };
 // mkUsr(myUser)
 
-const myUserId = atom({
-  key: 'myUserId',
-  default: '3593'
-})
+const App = () => {
+  const [userId, setUserId] = useRecoilState(myUserId);
+  // const [userExists, setUserExists] = useState(false)
 
-function App() {
+  async function checkUserExists() {
+    let response = await fetch(`https://gorest.co.in/public-api/users/${userId}`);
+    let data = await response.json()
+    if (data.code === 200) {
+      return true
+    } else {
+      return false
+    }
+  };
+
+  async function makeUserIfNone() {
+    let exists = await checkUserExists();
+    console.log(`user exists: ${exists}`)
+    if (exists === false) {
+      fetch(`https://gorest.co.in/public-api/users`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': apiKey,
+        },
+        body: JSON.stringify(myUser)
+        }).then(response =>  {
+        return response.json()
+        })
+          .then(data => {
+            setUserId(data.data.id)
+            console.log(data)
+          })
+            .catch(error => console.log('Error'))
+        }; 
+  };
+
+  makeUserIfNone()
 
   // useEffect(() => {
+   
   // },[])
 
   return (

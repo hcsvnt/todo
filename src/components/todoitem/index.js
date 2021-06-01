@@ -16,33 +16,24 @@ import styles from '../../styles';
 import {apiKeyState} from '../../App'
 import { useEffect, useState } from "react";
 
+import { reRender } from '../todolist';
+
 
 
 
 
 const TodoItem = ({item}) => {
+    const [render, setRender] = useRecoilState(reRender)
     const apiKey = useRecoilValue(apiKeyState)
 
-    const [title, setTitle] = useState(item.title)
-
-    // useEffect(() => {
-    //     setTitle(item.title)
-    // },[title])
-   
-
-    // function editItemText({target: {value}}) {
-    //     const newList = replaceItemAtIndex(todoList, index, {
-    //         ...item,
-    //         text: value,
-    //          updated_at: dateAndTime
-    //     });
-
-    //     setTodoList(newList);
-    // };
-
-    
+    // const [checked, setChecked] = useState(item.completed)
+    // const [title, setTitle] = useState(item.title)
+    //  WARNING USESTATE PERSISTS, DO NOT USE
 
     function toggleItemCompletion() {
+        // setChecked(!checked) this is shite
+        setTimeout( () => setRender(true), 3000)
+        // setRender(true)
         fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
             method: 'PATCH',
             headers: {
@@ -74,9 +65,9 @@ const TodoItem = ({item}) => {
             .catch(error => console.log('Error'))
     };
 
-    function editItemText(e) {
+    function editItemText() {
         console.log('editin')
-        setTitle(e.target.value)
+        // setTitle(e.target.value)
     }
 
     function submitChange() {
@@ -88,7 +79,7 @@ const TodoItem = ({item}) => {
             'Authorization': apiKey
             },
             body: JSON.stringify(
-                {title: title}
+                {title: item.title}
             ) 
             }).then(res =>  {
             return res.json()

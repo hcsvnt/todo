@@ -18,6 +18,7 @@ import styles from '../../styles';
 
 import TodoItemCreator from '../todoitemcreator';
 import TodoItem from '../todoitem';
+import TodoListStats from '../stats';
 
 import { apiKeyState } from '../../App';
 
@@ -32,6 +33,11 @@ const currentPage = atom({
     default: 1
   })
 
+  const reRender = atom({
+      key: 'reRender',
+      default: false
+  })
+
 // const query = atom({
 //     key: 'query',
 //     default: `https://gorest.co.in//public-api/todos`
@@ -43,46 +49,58 @@ const currentPage = atom({
 // title=mleko EXAMPLE
 // public-api/users/2687/todos?completed=true
 
-// need to set page=1 when params change
-
- // const response =  await fetch(`https://gorest.co.in//public-api/users/2687/todos?page=${pageNumber}`);
-// const response =  await fetch(`https://gorest.co.in//public-api/todos?page=${pageNumber}`);
-// let response =  await fetch(`https://gorest.co.in//public-api/todos${filter}?page=${pageNumber}`);
-
-// let response = await fetch(`${query}${filter}?page=${pageNumber}`);
-// let response =  await fetch('https://gorest.co.in/public-api/todos');
-
- // let stdQuery = get(query)
 
 const apiResponseData = selector({
     key: 'apiResponseData',
     get: async ({get}) => {
         let pageNumber = get(currentPage)
+        let render = get(reRender)
         let query = get(userFilterData)
         let filter = get(filterData)
         let search = get(searchFilter)
         // let response = await fetch(query)
         // let response = await fetch(`${query}${filter}?page=${pageNumber}`);
-        let response = await fetch(`${query}${filter}${search}`);
+        // let response = await fetch(`${query}${filter}${search}`);
+        
+        // let response = await fetch(`${query}${filter}${search}?page=${pageNumber}`);
 
-        let result = await response.json();
+        //  filters dont work for shit with the fucking pagenumber shite
+        // https://gorest.co.in/public-api/users/2639/todos?completed=true
+        // https://gorest.co.in/public-api/todos?completed=false
+        // let response = await fetch(`${query}${filter}?page=${pageNumber === 1 ? '' : pageNumber}`);
+        // let response = await fetch(`${query}${filter}?page=${pageNumber === 1 ? '' : pageNumber}`);
+        // let response = await fetch(`https://gorest.co.in/public-api/todos${filter}`); works
+        // let url = `${query}${search}${filter}`
+        let url = `${query}${filter === '?completed=false'? search+filter : filter+search }`
+        let response = await fetch(url);
+
+        let result = await response.json('');
         if (response.error) {
             console.error(response.error);
         }
         let totalPages = result.meta.pagination.pages
+        let meta = result.meta
         let apiData = result.data
-        // console.log(result)
+        console.log(result)
+        console.log(url)
         // console.log(result.meta.pagination)
         // console.log(pageNumber)
         return {
             apiData,
-            totalPages
+            totalPages,
+            meta
         }
         }
   });
 
 const TodoListPage = () => {
+    const [render, setRender] = useRecoilState(reRender)
     const { apiData, totalPages } = useRecoilValue(apiResponseData);
+
+    useEffect(() => {
+        setRender(false)
+        console.log(`i need to render is ${render}`)
+    })
     return (
         <div>
             {apiData.map(item => (
@@ -102,14 +120,14 @@ const TodoList = () => {
             <Switch>
                 <Route exact path='/'>
                     <Flex>
-                        {/* <TodoListStats />
-                        <TodoListFilters /> */}
+                        <TodoListStats />
                         <Filters />
                     </Flex>
                     <TodoItemCreator />
                     {/* <Search /> */}
                     {page} of
                     {totalPages}
+                    <button onClick={() => setPage(1)}>first</button>
                     <button onClick={() => setPage(page - 1)}>-</button>
                     <button onClick={() => setPage(page + 1)}>+</button>
                     <button onClick={() => setPage(totalPages)}>last</button>
@@ -121,7 +139,6 @@ const TodoList = () => {
                         fontFamily: 'main',
                         // background: 'green'
                     }}>
-                        {/* total oages. for each ... pass page number up to fetch how to do router use atom current page */}
                    <TodoListPage />
                     </div>
                 </Route>
@@ -144,5 +161,6 @@ export {
     // todoListData,
     apiResponseData,
     currentPage,
+    reRender,
     // query
 }
