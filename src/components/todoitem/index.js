@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 // import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, Route, Switch} from "react-router-dom";
 
 import {
     // RecoilRoot,
@@ -98,30 +98,31 @@ const TodoItem = ({item}) => {
     }
 
     return (
-        <div
-            sx={{
-                background: styles.colors.mid,
-                border: '1px solid black',
-                borderRadius: '4px',
-                padding: '1rem',
-                marginBottom: '1rem' 
-            }}
-        >
-            <p>{title.slice(0,30)}...</p>
-            <input type='text' value={title} onChange={editItemText} />
-            {/* how to make controlled input here */}
-            <button onClick={submitChange}>sub</button>
-            <span>chars: {title.length} </span>
-            <input 
-                type="checkbox"
-                checked={checked}
-                onChange={toggleItemCompletion}
-                />
-            <button onClick={deleteItem}>delete</button>
-            <Link to={`/items/${item.id}`}>
-                test
-            </Link>
-        </div>
+  
+                <div
+                    sx={{
+                        background: styles.colors.mid,
+                        border: '1px solid black',
+                        borderRadius: '4px',
+                        padding: '1rem',
+                        marginBottom: '1rem' 
+                    }}
+                >
+                    <p>{title.slice(0,30)}...</p>
+                    <input type='text' value={title} onChange={editItemText} />
+                    {/* how to make controlled input here */}
+                    <button onClick={submitChange}>sub</button>
+                    <span>chars: {title.length} </span>
+                    <input 
+                        type="checkbox"
+                        checked={checked}
+                        onChange={toggleItemCompletion}
+                        />
+                    <button onClick={deleteItem}>delete</button>
+                    <Link to={`/items/${item.id}`}>
+                        test
+                    </Link>
+                </div>      
     );
 };
 

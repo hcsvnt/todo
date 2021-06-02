@@ -1,7 +1,7 @@
 /** @jsxImportSource theme-ui */
 import React, { useEffect, useState } from 'react';
 // import ReactDOM from 'react-dom';
-import {Switch, Route} from "react-router-dom";
+import {Switch, Route, BrowserRouter as Router} from "react-router-dom";
 
 import {
     RecoilRoot,
@@ -81,9 +81,9 @@ const TodoListPage = () => {
             {apiData.map(item => (
                 <>
                 <TodoItem key={item.id} item={item} />
-                <Route path='/items/:Id'>
-                    <Test />
-                </Route>
+                {/* <Route path='/items/:Id'>
+                    <Test item={item.id} />
+                </Route> */}
                 </>
             ) )}
 
@@ -96,7 +96,7 @@ const TodoList = () => {
     const [page, setPage] = useRecoilState(currentPage)
 
     return (
-        <div>
+        <Router>
             <Switch>
                 <Route exact path='/'>
                     <Flex>
@@ -118,18 +118,16 @@ const TodoList = () => {
                         fontFamily: 'main',
                         // background: 'green'
                     }}>
-                   <TodoListPage />
+                        <TodoListPage />
                     </div>
                 </Route>
-                <Route path='/items/:Id'>
-                    {/* <Test item={item} /> */}
+                <Route path='/items/:id'>
                     <Test />
                 </Route>
             </Switch>
-        </div>
+        </Router>
     )
 };
-
 
 export default TodoList;
 
