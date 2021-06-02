@@ -17,6 +17,8 @@ import styles from './styles';
 import Header from './components/header';
 import TodoList from './components/todolist';
 
+import {apiResponseData} from './components/todolist'
+
 
 const apiKeyKey = process.env.REACT_APP_API_KEY;
 const apiKey = `Bearer ${apiKeyKey}`;
@@ -28,48 +30,8 @@ const apiKeyState = atom({
 
 const myUserId = atom({
   key: 'myUserId',
-  default: '2639'
+  default: 2603
 })
-
-// fetch('https://gorest.co.in/public-api/users/2639/todos?completed=true')
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log(data)
-//     })
-
-// fetch('https://gorest.co.in/public-api/users/2687')
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log(data)
-//     })
-
-// fetch(`https://gorest.co.in/public-api/users/2687/todos?completed=true`, {
-//         method: 'GET',
-//         headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': apiKey,
-//         },
-//         // body: JSON.stringify({
-//         //   gender: 'Male'
-//         // })
-//         }).then(response =>  {
-//         return response.json()
-//         })
-//           .then(data => {
-//             console.log(data)
-//             // console.log(data.meta.pagination)
-
-//           })
-//             .catch(error => console.log('Error'))
-
-            // public-api/todos?completed=true
-            // public-api/todos?completed=false
-            // public-api/todos?title=MYQUERY\
-            // title=mleko EXAMPLE
-            // public-api/users/2687/todos?completed=true
-
-    
-
 
 const myUser = {
   name: 'Halix321',
@@ -98,6 +60,7 @@ function mkUsr(userData) {
         })
           .then(data => {
             console.log(data)
+            console.log(data.data.id)
             // console.log(data.meta.pagination)
 
           })
@@ -107,12 +70,13 @@ function mkUsr(userData) {
 
 const App = () => {
   const [userId, setUserId] = useRecoilState(myUserId);
-  // const [userExists, setUserExists] = useState(false)
+
 
   async function checkUserExists() {
-    let response = await fetch(`https://gorest.co.in/public-api/users/${userId}`);
+    let response = await fetch(`https://gorest.co.in/public-api/users/name=Halix321`);
     let data = await response.json()
     if (data.code === 200) {
+      setUserId(data.data.id)
       return true
     } else {
       return false
@@ -122,6 +86,7 @@ const App = () => {
   async function makeUserIfNone() {
     let exists = await checkUserExists();
     console.log(`user exists: ${exists}`)
+    console.log(userId)
     if (exists === false) {
       fetch(`https://gorest.co.in/public-api/users`, {
         method: 'POST',
@@ -130,22 +95,50 @@ const App = () => {
         'Authorization': apiKey,
         },
         body: JSON.stringify(myUser)
-        }).then(response =>  {
-        return response.json()
-        })
+        }).then(response => response.json())
           .then(data => {
-            setUserId(data.data.id)
+            // setNewId(data.data.id)
+            // setUserId(newId)
+            let myNewId = data.data.id
             console.log(data)
+            console.log(userId)
+            return(myNewId)
           })
+          .then(console.log(userId))
             .catch(error => console.log('Error'))
         }; 
   };
 
-  makeUserIfNone()
+  
+  function deleteUser(deleteId) {
+    fetch(`https://gorest.co.in/public-api/users/${deleteId}`, {
+          method: 'DELETE',
+          headers: {
+          'Content-Type': 'application/json',
+          'Authorization': apiKey,
+          },
+          // body: JSON.stringify(userData)
+          }).then(response =>  {
+          return response.json()
+          })
+            .then(data => {
+              console.log(data)
+            })
+              .catch(error => console.log('Error'))
+  
+  }
 
-  // useEffect(() => {
-   
-  // },[])
+  fetch(`https://gorest.co.in/public-api/users?name=Halix321`)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  // deleteUser(2602)
+
+
+
+  useEffect(() => {
+    // makeUserIfNone().then(data => setUserId(data))
+
+  },[])
 
   return (
     <div

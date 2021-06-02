@@ -38,18 +38,6 @@ const currentPage = atom({
       default: false
   })
 
-// const query = atom({
-//     key: 'query',
-//     default: `https://gorest.co.in//public-api/todos`
-// })
-
- // public-api/todos?completed=true
-// public-api/todos?completed=false
-// public-api/todos?title=MYQUERY\
-// title=mleko EXAMPLE
-// public-api/users/2687/todos?completed=true
-
-
 const apiResponseData = selector({
     key: 'apiResponseData',
     get: async ({get}) => {
@@ -58,20 +46,7 @@ const apiResponseData = selector({
         let query = get(userFilterData)
         let filter = get(filterData)
         let search = get(searchFilter)
-        // let response = await fetch(query)
-        // let response = await fetch(`${query}${filter}?page=${pageNumber}`);
-        // let response = await fetch(`${query}${filter}${search}`);
-        
-        // let response = await fetch(`${query}${filter}${search}?page=${pageNumber}`);
-
-        //  filters dont work for shit with the fucking pagenumber shite
-        // https://gorest.co.in/public-api/users/2639/todos?completed=true
-        // https://gorest.co.in/public-api/todos?completed=false
-        // let response = await fetch(`${query}${filter}?page=${pageNumber === 1 ? '' : pageNumber}`);
-        // let response = await fetch(`${query}${filter}?page=${pageNumber === 1 ? '' : pageNumber}`);
-        // let response = await fetch(`https://gorest.co.in/public-api/todos${filter}`); works
-        // let url = `${query}${search}${filter}`
-        let url = `${query}${filter === '?completed=false'? search+filter : filter+search }`
+        let url = `${query}?page=${pageNumber}${search}${filter}`
         let response = await fetch(url);
 
         let result = await response.json('');
@@ -104,7 +79,12 @@ const TodoListPage = () => {
     return (
         <div>
             {apiData.map(item => (
+                <>
                 <TodoItem key={item.id} item={item} />
+                <Route path='/items/:Id'>
+                    <Test />
+                </Route>
+                </>
             ) )}
 
         </div>
@@ -124,7 +104,6 @@ const TodoList = () => {
                         <Filters />
                     </Flex>
                     <TodoItemCreator />
-                    {/* <Search /> */}
                     {page} of
                     {totalPages}
                     <button onClick={() => setPage(1)}>first</button>
@@ -143,7 +122,8 @@ const TodoList = () => {
                     </div>
                 </Route>
                 <Route path='/items/:Id'>
-                    {/* <Test /> */}
+                    {/* <Test item={item} /> */}
+                    <Test />
                 </Route>
             </Switch>
         </div>

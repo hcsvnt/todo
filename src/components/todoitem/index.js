@@ -18,6 +18,8 @@ import { useEffect, useState } from "react";
 
 import { reRender } from '../todolist';
 
+import Test from '../test';
+
 
 
 
@@ -26,14 +28,12 @@ const TodoItem = ({item}) => {
     const [render, setRender] = useRecoilState(reRender)
     const apiKey = useRecoilValue(apiKeyState)
 
-    // const [checked, setChecked] = useState(item.completed)
-    // const [title, setTitle] = useState(item.title)
+    const [checked, setChecked] = useState(item.completed)
+    const [title, setTitle] = useState(item.title)
     //  WARNING USESTATE PERSISTS, DO NOT USE
 
     function toggleItemCompletion() {
-        // setChecked(!checked) this is shite
-        setTimeout( () => setRender(true), 3000)
-        // setRender(true)
+        setChecked(!checked)
         fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
             method: 'PATCH',
             headers: {
@@ -48,6 +48,8 @@ const TodoItem = ({item}) => {
             })
             .then(data => console.log(data))
             .catch(error => console.log('Error'))
+        
+            setRender(true)
     }
    
 
@@ -63,15 +65,19 @@ const TodoItem = ({item}) => {
             })
             .then(data => console.log(data))
             .catch(error => console.log('Error'))
+        
+        setRender(true)
     };
 
-    function editItemText() {
+    function editItemText({target: {value}}) {
         console.log('editin')
-        // setTitle(e.target.value)
+        setTitle(value)
     }
 
     function submitChange() {
         console.log('submit')
+        // setTimeout( () => setRender(true), 3000)
+        setRender(true)
         fetch(`https://gorest.co.in//public-api/todos/${item.id}`, {
             method: 'PATCH',
             headers: {
@@ -79,7 +85,7 @@ const TodoItem = ({item}) => {
             'Authorization': apiKey
             },
             body: JSON.stringify(
-                {title: item.title}
+                {title: title}
             ) 
             }).then(res =>  {
             return res.json()
@@ -87,6 +93,8 @@ const TodoItem = ({item}) => {
             .then(data => console.log(data))
             .catch(error => console.log('Error'))
 
+
+            setRender(true)
     }
 
     return (
@@ -99,14 +107,14 @@ const TodoItem = ({item}) => {
                 marginBottom: '1rem' 
             }}
         >
-            <p>{item.title.slice(0,30)}...</p>
-            <input type='text' value={item.title} onChange={editItemText} />
+            <p>{title.slice(0,30)}...</p>
+            <input type='text' value={title} onChange={editItemText} />
             {/* how to make controlled input here */}
             <button onClick={submitChange}>sub</button>
-            {/* <span>chars: {item.text.length} </span> */}
+            <span>chars: {title.length} </span>
             <input 
                 type="checkbox"
-                checked={item.completed}
+                checked={checked}
                 onChange={toggleItemCompletion}
                 />
             <button onClick={deleteItem}>delete</button>

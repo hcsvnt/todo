@@ -25,9 +25,9 @@ const filterData = selector({
             case 'All':
                 return ''
             case 'To do':
-                return '?completed=false'
+                return '&completed=false'
             case 'Completed':
-                return '?completed=true'
+                return '&completed=true'
             default:
                 return '';
         }
@@ -85,7 +85,7 @@ const Filters = () => {
     }
 
     function updateSearchFilter() {
-        setSearch(`?title=${userSearch}`);
+        setSearch(`&title=${userSearch}`);
         if (userSearch === '') {
             setSearch('')
         }

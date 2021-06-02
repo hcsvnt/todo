@@ -1,11 +1,11 @@
 /** @jsxImportSource theme-ui */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
     // RecoilRoot,
-    // atom,
+    atom,
     selector,
-    // useRecoilState,
+    useRecoilState,
     useRecoilValue,
     // useSetRecoilState,
 } from 'recoil';
@@ -13,6 +13,26 @@ import {
 import { apiResponseData } from '../todolist';
 
 import styles from '../../styles';
+
+import {reRender} from '../todolist'
+
+
+const statsState = atom({
+    key: 'statsState',
+    default: 0
+})
+
+const statsCompletedState = atom({
+    key: 'statsCompletedState',
+    default: 0
+})
+
+const statsDataState = selector({
+    key: 'statsDataState',
+    get: ({get}) => {
+        let data = 'xxx'
+    }
+})
 
 // const todoListStatsData = selector({
 //     key: 'todoListStats',
@@ -32,33 +52,39 @@ import styles from '../../styles';
 //     }
 // });
 
-// fetch(`https://gorest.co.in/public-api/users/2687/todos?completed=true`, {
-//         method: 'GET',
-//         headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': apiKey,
-//         },
-//         // body: JSON.stringify({
-//         //   gender: 'Male'
-//         // })
-//         }).then(response =>  {
-//         return response.json()
-//         })
-//           .then(data => {
-//             console.log(data)
-//             // console.log(data.meta.pagination)
 
 const TodoListStats = () => {
-    // const {meta} = useRecoilValue(apiResponseData)
-    // console.log(meta)
-//     const {
-//         total,
-//         totalCompleted,
-//         totalToDo,
-//         percentCompleted
-//     } = useRecoilValue(todoListStatsData);
+    const [statsData, setStatsData] = useRecoilState(statsState);
+    const [statsCData, setStatsCData] = useRecoilState(statsCompletedState);
 
-    // const total = meta.total
+    const [render, setRender] = useRecoilState(reRender)
+
+    useEffect(() => {
+
+        async function getStats() {
+            let response = await fetch('https://gorest.co.in//public-api/todos');
+            let data = await response.json();
+            console.log(data.meta.pagination.total)
+            let totalTodos = data.meta.pagination.total
+            // setStatsData({...stats, total: totalTodos})
+            setStatsData(totalTodos)
+            return totalTodos
+        };
+        getStats()
+
+        async function getStats2() {
+            let response = await fetch('https://gorest.co.in//public-api/todos?completed=true');
+            let data = await response.json();
+            console.log(data.meta.pagination.total)
+            let completedTodos = data.meta.pagination.total
+            // setStatsData({...stats, total: totalTodos})
+            setStatsCData(completedTodos)
+            return completedTodos
+        };
+        getStats2()
+      
+
+    },[render])
 
     return (
         <div
@@ -72,13 +98,13 @@ const TodoListStats = () => {
         >
             <ul>
                 <li>
-                    total:
+                    t: {statsData} % {Math.floor(statsCData / statsData * 100)}
                 </li>
                 <li>
-                    completed: 
+                    c: {statsCData}
                 </li>
                 <li>
-                    to do: 
+                    to do: {statsData - statsCData}
                 </li>
             </ul>
         </div>
