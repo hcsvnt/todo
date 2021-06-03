@@ -1,24 +1,16 @@
 /** @jsxImportSource theme-ui */
-// import React from 'react';
-import {Link, Route, Switch} from "react-router-dom";
+import { useState } from "react";
+import {Link} from "react-router-dom";
 
 import {
-    // RecoilRoot,
-    // atom,
-    // selector,
-    useRecoilState, useRecoilValue,
-    // useRecoilValue,
-    // useSetRecoilState,
+    useRecoilState, 
+    useRecoilValue,
   } from 'recoil';
 
 import styles from '../../styles';
 
 import {apiKeyState} from '../../App'
-import { useEffect, useState } from "react";
-
 import { reRender } from '../todolist';
-
-import Test from '../test';
 
 
 
@@ -30,7 +22,6 @@ const TodoItem = ({item}) => {
 
     const [checked, setChecked] = useState(item.completed)
     const [title, setTitle] = useState(item.title)
-    //  WARNING USESTATE PERSISTS, DO NOT USE
 
     function toggleItemCompletion() {
         setChecked(!checked)
@@ -98,31 +89,45 @@ const TodoItem = ({item}) => {
     }
 
     return (
-  
-                <div
-                    sx={{
-                        background: styles.colors.mid,
-                        border: '1px solid black',
-                        borderRadius: '4px',
-                        padding: '1rem',
-                        marginBottom: '1rem' 
-                    }}
+        <div
+        sx={{
+            background: styles.colors.mid,
+            border: '1px solid black',
+            borderRadius: '4px',
+            padding: '1rem',
+            marginBottom: '1rem',
+        }}
+        >
+            <p
+            sx={{
+                paddingLeft: '1rem'
+            }}
+            >{title.slice(0,30)}...</p>
+            <input type='text' value={title} onChange={editItemText} />
+            <button onClick={submitChange}>sub</button>
+            {/* <span>chars: {title.length} </span> */}
+            <div
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-evenly'
+                }}
                 >
-                    <p>{title.slice(0,30)}...</p>
-                    <input type='text' value={title} onChange={editItemText} />
-                    {/* how to make controlled input here */}
-                    <button onClick={submitChange}>sub</button>
-                    <span>chars: {title.length} </span>
-                    <input 
-                        type="checkbox"
-                        checked={checked}
-                        onChange={toggleItemCompletion}
-                        />
-                    <button onClick={deleteItem}>delete</button>
-                    <Link to={`/items/${item.id}`}>
-                        test
-                    </Link>
-                </div>      
+                completed:
+                <input 
+                    type="checkbox"
+                    checked={checked}
+                    onChange={toggleItemCompletion}
+                    />
+                <Link to={`/items/${item.id}`}
+                sx={{
+                    color: 'inherit'
+                }}
+                >
+                    show item
+                </Link>
+                <button onClick={deleteItem}>delete</button>
+            </div>      
+        </div>
     );
 };
 

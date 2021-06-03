@@ -1,24 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import {Link, useParams, useRouteMatch} from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 import {
     // RecoilRoot,
-    // atom,
+    atom,
     // selector,
     useRecoilState, useRecoilValue,
     // useRecoilValue,
     // useSetRecoilState,
   } from 'recoil';
 
-  import {apiResponseData} from '../todolist'
+  import {apiKeyState} from '../../App'
+  import {reRender} from '../todolist'
 
-//   import { todoListData } from '../../components/todolist';
+const dataState = atom({
+    key: 'dataState',
+    default: 'no data'
+})
+
+
+
 const Test = () => {
-    const [data, setData] = useState('')
-    let { id } = useParams()
-    let { path, url } = useRouteMatch();
+    let { id: itemId } = useParams()
+    // let { path, url } = useRouteMatch();
+    const [data, setData] = useRecoilState(dataState)
+    const [title, setTitle] = useState(data.title)
+    const apiKey = useRecoilValue(apiKeyState)
+    const [render, setRender] = useRecoilState(reRender)
 
-    console.log(id)
+    function editItemText({target: {value}}) {
+        console.log('editin')
+        setTitle(value)
+    }
+
+    function submitChange() {
+        console.log('submit')
+        // setTimeout( () => setRender(true), 3000)
+        setRender(true)
+        fetch(`https://gorest.co.in//public-api/todos/${data.id}`, {
+            method: 'PATCH',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': apiKey
+            },
+            body: JSON.stringify(
+                {title: title}
+            ) 
+            }).then(res =>  {
+            return res.json()
+            })
+            .then(data => console.log(data))
+            .catch(error => console.log('Error'))
+            setRender(true)
+    }
+
+    console.log(itemId)
 
     async function getData(id) {
         let response = await fetch(`https://gorest.co.in/public-api/todos/${id}`);
@@ -29,35 +65,31 @@ const Test = () => {
     // getData(id)
 
     useEffect(() => {
-        getData(id)
+        getData(itemId)
     }, [])
 
     return (
         <div>
             <p>
+                {/* {data} */}
+            </p>
+            <p>
                 {data.title}
+            </p>
+            <input type='text' value={data.title} onChange={editItemText} />
+            <button onClick={submitChange}>sub</button>
+            {/* <span>chars: {title.length} </span> */}
+            <p>
+                created:
                 {data.created_at}
-                by {data.user_id}            
+                {/* date: {data.created_at.slice(0,10)}
+                time: {data.created_at.slice(10,18)} */}
+            </p>
+            <p>
+                by user number:  {data.user_id}            
             </p>
         </div>
     )
-
 };
 
 export default Test; 
-
-
-// const [todoList] = useRecoilState(todoListData);
-//     let {Id} = useParams();
-//     const item = todoList[Id]
-//     return (
-//         <div>
-//             <span>
-//                 {item.text}
-//             </span>
-//             <span>chars: {item.text.length} </span>
-//             <Link to='/'>
-//                 back
-//             </Link>
-//         </div>
-//     )

@@ -1,21 +1,17 @@
 /** @jsxImportSource theme-ui */
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import {
-    // RecoilRoot,
     atom,
     selector,
     useRecoilState,
     useRecoilValue,
-    // useSetRecoilState,
 } from 'recoil';
-
-import { apiResponseData } from '../todolist';
 
 import styles from '../../styles';
 
 import {reRender} from '../todolist'
-
+import { userFilterData } from '../todolistfilters'
 
 const statsState = atom({
     key: 'statsState',
@@ -54,6 +50,7 @@ const statsDataState = selector({
 
 
 const TodoListStats = () => {
+    const query = useRecoilValue(userFilterData)
     const [statsData, setStatsData] = useRecoilState(statsState);
     const [statsCData, setStatsCData] = useRecoilState(statsCompletedState);
 
@@ -62,7 +59,8 @@ const TodoListStats = () => {
     useEffect(() => {
 
         async function getStats() {
-            let response = await fetch('https://gorest.co.in//public-api/todos');
+            // let response = await fetch('https://gorest.co.in//public-api/todos');
+            let response = await fetch(`${query}`);
             let data = await response.json();
             console.log(data.meta.pagination.total)
             let totalTodos = data.meta.pagination.total
@@ -73,7 +71,7 @@ const TodoListStats = () => {
         getStats()
 
         async function getStats2() {
-            let response = await fetch('https://gorest.co.in//public-api/todos?completed=true');
+            let response = await fetch(`${query}/todos?completed=true`);
             let data = await response.json();
             console.log(data.meta.pagination.total)
             let completedTodos = data.meta.pagination.total
@@ -81,7 +79,7 @@ const TodoListStats = () => {
             setStatsCData(completedTodos)
             return completedTodos
         };
-        getStats2()
+        // getStats2()
       
 
     },[render])
@@ -92,16 +90,24 @@ const TodoListStats = () => {
                 background: styles.colors.mid,
                 border: '1px solid black',
                 borderRadius: '4px',
-                padding: '1rem',
-                marginBottom: '1rem' 
+                // padding: '1rem',
+                marginBottom: '1rem',
+                width: '100%'
             }}
         >
-            <ul>
+            <ul
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                // justifyContent: 'space-evenly',
+                listStyle: 'none'
+            }}
+            >
                 <li>
-                    t: {statsData} % {Math.floor(statsCData / statsData * 100)}
+                    total: {statsData} 
                 </li>
                 <li>
-                    c: {statsCData}
+                    completed: {statsCData} ( {Math.floor(statsCData / statsData * 100)} %)
                 </li>
                 <li>
                     to do: {statsData - statsCData}

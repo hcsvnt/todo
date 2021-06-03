@@ -1,6 +1,5 @@
 /** @jsxImportSource theme-ui */
-import React, { useEffect, useState } from 'react';
-// import ReactDOM from 'react-dom';
+import { useEffect } from 'react';
 import {Switch, Route, BrowserRouter as Router} from "react-router-dom";
 
 import {
@@ -12,21 +11,14 @@ import {
     useSetRecoilState,
 } from 'recoil';
 
-import { Flex, get } from 'theme-ui';
-import styles from '../../styles';
-
 
 import TodoItemCreator from '../todoitemcreator';
 import TodoItem from '../todoitem';
 import TodoListStats from '../stats';
 
-import { apiKeyState } from '../../App';
-
 import Test from '../test';
 
-import { myUserId } from '../../App';
-
-import Filters, { filters, filterData, userFilters, userFilterData, searchFilter } from '../todolistfilters';
+import Filters, { filterData, userFilterData, searchFilter } from '../todolistfilters';
 
 const currentPage = atom({
     key: 'currentPage',
@@ -58,8 +50,7 @@ const apiResponseData = selector({
         let apiData = result.data
         console.log(result)
         console.log(url)
-        // console.log(result.meta.pagination)
-        // console.log(pageNumber)
+        
         return {
             apiData,
             totalPages,
@@ -74,16 +65,12 @@ const TodoListPage = () => {
 
     useEffect(() => {
         setRender(false)
-        console.log(`i need to render is ${render}`)
     })
     return (
         <div>
             {apiData.map(item => (
                 <>
-                <TodoItem key={item.id} item={item} />
-                {/* <Route path='/items/:Id'>
-                    <Test item={item.id} />
-                </Route> */}
+                    <TodoItem key={item.id} item={item} /> 
                 </>
             ) )}
 
@@ -99,17 +86,24 @@ const TodoList = () => {
         <Router>
             <Switch>
                 <Route exact path='/'>
-                    <Flex>
+                    <div
+                    sx={{
+                        direction: "column"
+                    }}
+                    >
                         <TodoListStats />
                         <Filters />
-                    </Flex>
-                    <TodoItemCreator />
-                    {page} of
-                    {totalPages}
+                    <div>
+                        Page: 
+                        {page} of
+                        {totalPages}
                     <button onClick={() => setPage(1)}>first</button>
                     <button onClick={() => setPage(page - 1)}>-</button>
                     <button onClick={() => setPage(page + 1)}>+</button>
                     <button onClick={() => setPage(totalPages)}>last</button>
+                    </div>
+                    <TodoItemCreator />
+                    </div>
                     <div
                     sx={{
                         display: 'flex',
@@ -130,15 +124,8 @@ const TodoList = () => {
 };
 
 export default TodoList;
-
-// export {
-//     currentPage
-// }
-
 export {
-    // todoListData,
     apiResponseData,
     currentPage,
     reRender,
-    // query
 }

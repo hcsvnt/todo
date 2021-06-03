@@ -1,12 +1,10 @@
 /** @jsxImportSource theme-ui */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import {
   // RecoilRoot,
   atom,
-  selector,
   useRecoilState,
-  useRecoilValue,
 } from 'recoil';
 
 import './styles/fonts.css'
@@ -16,9 +14,6 @@ import styles from './styles';
 
 import Header from './components/header';
 import TodoList from './components/todolist';
-
-import {apiResponseData} from './components/todolist'
-
 
 const apiKeyKey = process.env.REACT_APP_API_KEY;
 const apiKey = `Bearer ${apiKeyKey}`;
@@ -30,7 +25,7 @@ const apiKeyState = atom({
 
 const myUserId = atom({
   key: 'myUserId',
-  default: 2603
+  default: 1717
 })
 
 const myUser = {
@@ -82,11 +77,9 @@ const App = () => {
       return false
     }
   };
-
+  let newId = ''
   async function makeUserIfNone() {
     let exists = await checkUserExists();
-    console.log(`user exists: ${exists}`)
-    console.log(userId)
     if (exists === false) {
       fetch(`https://gorest.co.in/public-api/users`, {
         method: 'POST',
@@ -97,12 +90,8 @@ const App = () => {
         body: JSON.stringify(myUser)
         }).then(response => response.json())
           .then(data => {
-            // setNewId(data.data.id)
-            // setUserId(newId)
-            let myNewId = data.data.id
-            console.log(data)
-            console.log(userId)
-            return(myNewId)
+            newId = data.data.id
+            return(newId)
           })
           .then(console.log(userId))
             .catch(error => console.log('Error'))
@@ -117,7 +106,6 @@ const App = () => {
           'Content-Type': 'application/json',
           'Authorization': apiKey,
           },
-          // body: JSON.stringify(userData)
           }).then(response =>  {
           return response.json()
           })
@@ -127,16 +115,19 @@ const App = () => {
               .catch(error => console.log('Error'))
   
   }
+  function checkId() {
+    fetch(`https://gorest.co.in/public-api/users?name=Halix321`)
+    .then(response => response.json())
+    .then(data => setUserId(data.data[0].id))
+  }
 
-  fetch(`https://gorest.co.in/public-api/users?name=Halix321`)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  // deleteUser(2602)
+  deleteUser(1717)
 
 
 
   useEffect(() => {
-    // makeUserIfNone().then(data => setUserId(data))
+    makeUserIfNone()
+    checkId()
 
   },[])
 
@@ -145,7 +136,9 @@ const App = () => {
       sx={{
           fontFamily: 'Poppins',
           background: styles.colors.bg,
-          color: styles.colors.main
+          color: styles.colors.main,
+          maxWidth: '600px',
+          margin: '0 auto'
           
     }}>
         <ThemeProvider theme={styles}>
@@ -162,9 +155,6 @@ const App = () => {
 export default App;
 
 export { 
-        // todoListData,
-        // apiResponseData,
-        // currentPage,
         apiKeyState,
         myUserId,
        };
